@@ -10,10 +10,9 @@ import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.rafaelaznar.dao.CompraDao_Mysql;
 import net.rafaelaznar.helper.Conexion;
-import net.rafaelaznar.helper.EncodingUtil;
 import net.rafaelaznar.bean.CompraBean;
+import net.rafaelaznar.dao.CompraDao;
 
 /**
  *
@@ -24,7 +23,7 @@ public class CompraRemove implements GenericOperation {
     public String execute(HttpServletRequest request, HttpServletResponse response) throws Exception {
 
         try {
-            CompraDao_Mysql oCompraDAO = new CompraDao_Mysql(Conexion.getConection());
+            CompraDao oCompraDAO = new CompraDao(Conexion.getConection());
             CompraBean oCompra = new CompraBean();                                           
             oCompra.setId(Integer.parseInt(request.getParameter("id")));            
             Map<String, String> data = new HashMap<>();

@@ -14,6 +14,7 @@ import java.util.Locale;
 import net.rafaelaznar.data.MysqlData;
 import net.rafaelaznar.helper.Conexion;
 import net.rafaelaznar.helper.FilterBean;
+import java.text.SimpleDateFormat;
 
 /**
  *
@@ -100,12 +101,20 @@ public class GenericDaoImplementation<TIPO_OBJETO> implements GenericDao<TIPO_OB
                         if (!method.getName().substring(3).equalsIgnoreCase("id")) {
                             if (method.getName().substring(0, 3).equalsIgnoreCase("set")) {
                                 final Class<?> primitive = method.getParameterTypes()[0];
-                                if (primitive.getName().equals("java.lang.Double")) {
-                                    method.invoke(oBean,  Double.parseDouble( oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean))));
-                                } else if (primitive.getName().equals("java.lang.Integer")) {
-                                    method.invoke(oBean, Integer.parseInt(oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean))));
-                                } else {
-                                    method.invoke(oBean, oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean)));
+                                switch (primitive.getName()) {
+                                    case "java.lang.Double":
+                                        method.invoke(oBean, Double.parseDouble(oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean))));
+                                        break;
+                                    case "java.lang.Integer":
+                                        method.invoke(oBean, Integer.parseInt(oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean))));
+                                        break;
+                                    case "java.util.Date":
+                                        SimpleDateFormat oSimpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                        method.invoke(oBean, oSimpleDateFormat.parse(oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean))));
+                                        break;
+                                    default:
+                                        method.invoke(oBean, oMysql.getOne(strTabla, method.getName().substring(3).toLowerCase(Locale.ENGLISH), (Integer) metodo_getId.invoke(oBean)));
+                                        break;
                                 }
                             }
                         }

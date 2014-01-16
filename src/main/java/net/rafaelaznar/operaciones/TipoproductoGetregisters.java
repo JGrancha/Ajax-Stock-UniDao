@@ -5,11 +5,10 @@
 package net.rafaelaznar.operaciones;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import net.rafaelaznar.dao.TipoproductoDao_Mysql;
+import net.rafaelaznar.dao.TipoproductoDao;
 import net.rafaelaznar.helper.Conexion;
 import net.rafaelaznar.helper.FilterBean;
 
@@ -48,7 +47,7 @@ public class TipoproductoGetregisters implements GenericOperation {
                     }
                 }
             }
-            TipoproductoDao_Mysql oTipoproductoDAO = new TipoproductoDao_Mysql(Conexion.getConection());
+            TipoproductoDao oTipoproductoDAO = new TipoproductoDao(Conexion.getConection());
             int pages = oTipoproductoDAO.getCount(alFilter);
             data = "{\"data\":\"" + Integer.toString(pages) + "\"}";
             return data;
